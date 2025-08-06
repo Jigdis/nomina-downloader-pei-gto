@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NominaDownloaderPEIGTO.Application\NominaDownloaderPEIGTO.Application.csproj" />
+    <ProjectReference Include="..\NominaDownloaderPEIGTO.Common\NominaDownloaderPEIGTO.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

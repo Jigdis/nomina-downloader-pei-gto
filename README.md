@@ -142,6 +142,7 @@ src/
 ├── NominaDownloaderPEIGTO.Domain/          # Entidades, Value Objects, Enums
 ├── NominaDownloaderPEIGTO.Application/     # Casos de uso, Comandos, Queries
 ├── NominaDownloaderPEIGTO.Infrastructure/  # Servicios externos, Repositories
+├── NominaDownloaderPEIGTO.Common/          # Utilidades compartidas
 └── NominaDownloaderPEIGTO.Console/         # UI, DI, Configuración
 
 tests/
@@ -155,6 +156,7 @@ tests/
 - **🔄 ErrorRecoveryService**: Sistema de recuperación automática
 - **📸 SnapshotService**: Persistencia de estado y reanudación
 - **📊 ProgressService**: Reportes en tiempo real
+- **🔧 PathUtils**: Utilidades para sanitización de nombres de carpetas
 
 ## ⚙️ **Configuración Avanzada**
 
@@ -179,6 +181,7 @@ var config = new DownloadConfig(
 }
 ```
 
+
 ## 📈 **Optimizaciones Implementadas**
 
 ### 🧹 **Limpieza del Proyecto (Agosto 2025)**
@@ -186,6 +189,12 @@ var config = new DownloadConfig(
 - ✅ **Handlers simplificados**: Eliminados DownloadFileHandler y GetSessionStatusHandler redundantes
 - ✅ **Estructura optimizada**: Solo archivos esenciales para funcionalidad core
 - ✅ **Tests validados**: 267 tests unitarios completamente alineados con implementaciones
+
+### 🔧 **Refactoring del Proyecto Common (Agosto 2025)**
+- ✅ **Creación del proyecto Common**: Nuevo proyecto `NominaDownloaderPEIGTO.Common` para funcionalidades compartidas
+- ✅ **Referencias actualizadas**: Infrastructure y Tests ahora usan la funcionalidad común
+- ✅ **Mantenibilidad mejorada**: Un solo lugar para mantener lógica de sanitización de carpetas
+- ✅ **Tests validados**: 267 tests ejecutándose exitosamente tras el refactoring
 
 ### Rendimiento de Tests
 - ✅ **Eliminación de delays**: Removidos `Thread.Sleep()` innecesarios
@@ -285,6 +294,7 @@ Para reportar problemas o solicitar características:
 - **🔶 Application** - Casos de uso y orquestación (CQRS)
 - **🔸 Infrastructure** - Servicios externos (Selenium, archivos)
 - **🔹 Console** - Interfaz de usuario y composición
+- **🔧 Common** - Utilidades compartidas y funcionalidades comunes
 - **🧪 Tests** - Pruebas unitarias y de integración
 
 ### 📂 **Estructura del Proyecto**
@@ -298,6 +308,7 @@ NominaDownloader-PEI-GTO/
 │   ├── NominaDownloaderPEIGTO.Domain/          🔷 Entidades y lógica de negocio
 │   ├── NominaDownloaderPEIGTO.Application/     🔶 Casos de uso (CQRS)
 │   ├── NominaDownloaderPEIGTO.Infrastructure/  🔸 Selenium y servicios externos
+│   ├── NominaDownloaderPEIGTO.Common/          🔧 Utilidades compartidas
 │   └── NominaDownloaderPEIGTO.Console/         🔹 Aplicación de consola
 │       └── logs/                               📊 Logs de la aplicación
 └── tests/

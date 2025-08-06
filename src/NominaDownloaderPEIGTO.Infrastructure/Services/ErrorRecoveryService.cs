@@ -1,4 +1,5 @@
 using NominaDownloaderPEIGTO.Application.Interfaces;
+using NominaDownloaderPEIGTO.Common.Utilities;
 using NominaDownloaderPEIGTO.Domain.Entities;
 using NominaDownloaderPEIGTO.Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -41,7 +42,7 @@ namespace NominaDownloaderPEIGTO.Infrastructure.Services
                 // Agregar los períodos fallidos
                 foreach (var period in failedPeriods)
                 {
-                    var sanitizedPeriodName = SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}");
+                    var sanitizedPeriodName = PathUtils.SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}");
                     var folderPath = Path.Combine(Environment.CurrentDirectory, "downloads", period.Year.ToString(), sanitizedPeriodName);
                     recoverySession.AddFailedAttempt(period, "Carpeta vacía después de la descarga", folderPath);
                 }
@@ -138,7 +139,7 @@ namespace NominaDownloaderPEIGTO.Infrastructure.Services
 
                 foreach (var period in periods)
                 {
-                    var sanitizedPeriodName = SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}");
+                    var sanitizedPeriodName = PathUtils.SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}");
                     var folderPath = Path.Combine(downloadPath, period.Year.ToString(), sanitizedPeriodName);
                     
                     if (Directory.Exists(folderPath))
@@ -232,40 +233,6 @@ namespace NominaDownloaderPEIGTO.Infrastructure.Services
                 _logger.LogError(ex, "Error al guardar sesión de recuperación {SessionId}", session.Id);
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Sanitiza el nombre de una carpeta reemplazando caracteres inválidos
-        /// </summary>
-        /// <param name="folderName">Nombre original de la carpeta</param>
-        /// <returns>Nombre sanitizado válido para el sistema de archivos</returns>
-        private string SanitizeFolderName(string folderName)
-        {
-            // Reemplazar caracteres no válidos con underscore
-            var invalidChars = Path.GetInvalidFileNameChars();
-            foreach (var invalidChar in invalidChars)
-            {
-                folderName = folderName.Replace(invalidChar, '_');
-            }
-            
-            // Reemplazar espacios con underscore
-            folderName = folderName.Replace(' ', '_');
-            
-            // Reemplazar caracteres especiales comunes
-            folderName = folderName.Replace('-', '_')
-                                   .Replace('(', '_')
-                                   .Replace(')', '_')
-                                   .Replace(',', '_')
-                                   .Replace('.', '_');
-            
-            // Remover underscores múltiples
-            while (folderName.Contains("__"))
-            {
-                folderName = folderName.Replace("__", "_");
-            }
-            
-            // Remover underscores al inicio y final
-            return folderName.Trim('_');
         }
     }
 }

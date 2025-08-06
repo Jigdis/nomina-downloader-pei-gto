@@ -2,6 +2,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using NominaDownloaderPEIGTO.Application.Interfaces;
+using NominaDownloaderPEIGTO.Common.Utilities;
 using NominaDownloaderPEIGTO.Domain.Enums;
 using NominaDownloaderPEIGTO.Domain.Exceptions;
 using NominaDownloaderPEIGTO.Domain.ValueObjects;
@@ -320,7 +321,7 @@ namespace NominaDownloaderPEIGTO.Infrastructure.Services
                 Console.WriteLine($"📄 Período encontrado: {periodDescription}");
                 
                 // Crear la estructura de carpetas
-                var folderName = SanitizeFolderName($"Periodo_{period.Period:D2}_{periodDescription}");
+                var folderName = PathUtils.SanitizeFolderName($"Periodo_{period.Period:D2}_{periodDescription}");
                 var targetDirectory = Path.Combine("C:\\Recibos", period.Year.ToString(), folderName);
                 
                 // Verificar si la carpeta ya existe y tiene archivos
@@ -1065,34 +1066,6 @@ namespace NominaDownloaderPEIGTO.Infrastructure.Services
             using var stream = File.OpenRead(filePath);
             var hashBytes = await Task.Run(() => md5.ComputeHash(stream));
             return Convert.ToHexString(hashBytes);
-        }
-
-        private string SanitizeFolderName(string folderName)
-        {
-            // Reemplazar caracteres no válidos con underscore
-            var invalidChars = Path.GetInvalidFileNameChars();
-            foreach (var invalidChar in invalidChars)
-            {
-                folderName = folderName.Replace(invalidChar, '_');
-            }
-            
-            // Reemplazar espacios con underscore
-            folderName = folderName.Replace(' ', '_');
-            
-            // Reemplazar caracteres especiales comunes
-            folderName = folderName.Replace('-', '_')
-                                   .Replace('(', '_')
-                                   .Replace(')', '_')
-                                   .Replace(',', '_')
-                                   .Replace('.', '_');
-            
-            // Remover underscores múltiples
-            while (folderName.Contains("__"))
-            {
-                folderName = folderName.Replace("__", "_");
-            }
-            
-            return folderName.Trim('_');
         }
 
         private string ExtractFileNameFromUrl(string url)

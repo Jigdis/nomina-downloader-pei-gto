@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NominaDownloaderPEIGTO.Common.Utilities;
 using NominaDownloaderPEIGTO.Domain.Entities;
 using NominaDownloaderPEIGTO.Domain.ValueObjects;
 using NominaDownloaderPEIGTO.Infrastructure.Services;
@@ -65,38 +66,6 @@ public class ErrorRecoveryServiceTests : IDisposable
                 // Ignorar errores de limpieza
             }
         }
-    }
-
-    /// <summary>
-    /// Método helper que replica la lógica de sanitización del ErrorRecoveryService para tests
-    /// </summary>
-    private string SanitizeFolderNameForTest(string folderName)
-    {
-        // Reemplazar caracteres no válidos con underscore
-        var invalidChars = Path.GetInvalidFileNameChars();
-        foreach (var invalidChar in invalidChars)
-        {
-            folderName = folderName.Replace(invalidChar, '_');
-        }
-        
-        // Reemplazar espacios con underscore
-        folderName = folderName.Replace(' ', '_');
-        
-        // Reemplazar caracteres especiales comunes
-        folderName = folderName.Replace('-', '_')
-                               .Replace('(', '_')
-                               .Replace(')', '_')
-                               .Replace(',', '_')
-                               .Replace('.', '_');
-        
-        // Remover underscores múltiples
-        while (folderName.Contains("__"))
-        {
-            folderName = folderName.Replace("__", "_");
-        }
-        
-        // Remover underscores al inicio y final
-        return folderName.Trim('_');
     }
 
     [Fact]
@@ -282,7 +251,7 @@ public class ErrorRecoveryServiceTests : IDisposable
         foreach (var period in periods)
         {
             // Usar la misma lógica que el servicio: SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}")
-            var sanitizedPeriodName = SanitizeFolderNameForTest($"Periodo_{period.Period:D2}_{period.DisplayName}");
+            var sanitizedPeriodName = PathUtils.SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}");
             var folderPath = Path.Combine(downloadPath, period.Year.ToString(), sanitizedPeriodName);
             Directory.CreateDirectory(folderPath);
             
@@ -298,7 +267,7 @@ public class ErrorRecoveryServiceTests : IDisposable
         // Verificar que las carpetas fueron eliminadas
         foreach (var period in periods)
         {
-            var sanitizedPeriodName = SanitizeFolderNameForTest($"Periodo_{period.Period:D2}_{period.DisplayName}");
+            var sanitizedPeriodName = PathUtils.SanitizeFolderName($"Periodo_{period.Period:D2}_{period.DisplayName}");
             var folderPath = Path.Combine(downloadPath, period.Year.ToString(), sanitizedPeriodName);
             Directory.Exists(folderPath).Should().BeFalse();
         }

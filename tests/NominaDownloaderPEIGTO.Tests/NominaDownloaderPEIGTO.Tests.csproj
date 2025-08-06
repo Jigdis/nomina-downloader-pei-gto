@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\src\NominaDownloaderPEIGTO.Domain\NominaDownloaderPEIGTO.Domain.csproj" />
     <ProjectReference Include="..\..\src\NominaDownloaderPEIGTO.Application\NominaDownloaderPEIGTO.Application.csproj" />
     <ProjectReference Include="..\..\src\NominaDownloaderPEIGTO.Infrastructure\NominaDownloaderPEIGTO.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\NominaDownloaderPEIGTO.Common\NominaDownloaderPEIGTO.Common.csproj" />
   </ItemGroup>
 
 </Project>
